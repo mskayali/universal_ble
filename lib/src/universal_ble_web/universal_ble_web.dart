@@ -322,7 +322,7 @@ class UniversalBleWeb extends UniversalBlePlatform {
     var services = _serviceCache[deviceId] ?? [];
     if (services.isNotEmpty) return services;
     for (var service in await device.discoverServices()) {
-      services.add(await _UniversalWebBluetoothService.fromService(service));
+      services.add(await _UniversalWebBluetoothService.fromService(service, device.id));
     }
     _serviceCache[deviceId] = services;
     return services;
@@ -437,11 +437,13 @@ extension _UnmodifiableMapViewExtension on UnmodifiableMapView<int, ByteData> {
 }
 
 class _UniversalWebBluetoothService {
+  String device;
   late String uuid;
   BluetoothService service;
   List<BluetoothCharacteristic> characteristics;
 
   _UniversalWebBluetoothService({
+    required this.device,
     required this.service,
     required this.characteristics,
   }) {
@@ -450,9 +452,11 @@ class _UniversalWebBluetoothService {
 
   static Future<_UniversalWebBluetoothService> fromService(
     BluetoothService service,
+    String device,
   ) async {
     return _UniversalWebBluetoothService(
       service: service,
+      device: device,
       characteristics: await service.getCharacteristics(),
     );
   }
@@ -479,7 +483,8 @@ class _UniversalWebBluetoothService {
             if (e.properties.indicate) CharacteristicProperty.indicate,
             if (e.properties.authenticatedSignedWrites)
               CharacteristicProperty.authenticatedSignedWrites,
-          ]);
+          ],
+              device,service.uuid);
         }).toList(),
       );
 }

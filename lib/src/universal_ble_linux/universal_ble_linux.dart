@@ -173,7 +173,7 @@ class UniversalBleLinux extends UniversalBlePlatform {
             .map((e) => e.toCharacteristicProperty())
             .where((element) => element != null)
             .toList());
-        return BleCharacteristic(e.uuid.toString(), properties);
+        return BleCharacteristic(e.uuid.toString(), properties, device.address, service.uuid.toString());
       }).toList();
       services.add(BleService(service.uuid.toString(), characteristics));
     }

@@ -74,10 +74,12 @@ class UniversalBleScanResult {
 class UniversalBleService {
   UniversalBleService({
     required this.uuid,
-    this.characteristics,
+    required this.characteristics,
+    this.device,
   });
 
   String uuid;
+  late String? device;
 
   List<UniversalBleCharacteristic>? characteristics;
 
@@ -88,9 +90,10 @@ class UniversalBleService {
     ];
   }
 
-  static UniversalBleService decode(Object result) {
+  static UniversalBleService decode(Object result, [String? deviceId]) {
     result as List<Object?>;
     return UniversalBleService(
+      device: deviceId,
       uuid: result[0]! as String,
       characteristics: (result[1] as List<Object?>?)?.cast<UniversalBleCharacteristic>(),
     );
@@ -99,11 +102,15 @@ class UniversalBleService {
 
 class UniversalBleCharacteristic {
   UniversalBleCharacteristic({
+    this.device,
+    this.service,
     required this.uuid,
     required this.properties,
   });
 
   String uuid;
+  late String? device;
+  late String? service;
 
   List<int> properties;
 
@@ -114,9 +121,11 @@ class UniversalBleCharacteristic {
     ];
   }
 
-  static UniversalBleCharacteristic decode(Object result) {
+  static UniversalBleCharacteristic decode(Object result,[String? device,String? service]) {
     result as List<Object?>;
     return UniversalBleCharacteristic(
+      device: device,
+      service: service,
       uuid: result[0]! as String,
       properties: (result[1] as List<Object?>?)!.cast<int>(),
     );

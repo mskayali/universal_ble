@@ -137,6 +137,7 @@ class UniversalBlePigeonChannel extends UniversalBlePlatform {
 
 extension _BleServiceExtension on UniversalBleService {
   BleService toBleService() {
+    
     List<BleCharacteristic> bleCharacteristics = [];
     for (UniversalBleCharacteristic? characteristic in characteristics ?? []) {
       if (characteristic == null) continue;
@@ -146,6 +147,8 @@ extension _BleServiceExtension on UniversalBleService {
         List<CharacteristicProperty>.from(
           properties.map((e) => CharacteristicProperty.parse(e ?? 1)),
         ),
+        characteristic.device!,
+        characteristic.service!
       ));
     }
     return BleService(uuid, bleCharacteristics);

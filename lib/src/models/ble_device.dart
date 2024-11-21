@@ -28,6 +28,9 @@ class BleDevice {
   bool get receivesAdvertisements =>
       UniversalBle.receivesAdvertisements(deviceId);
 
+  Future<List<BleService>> discoverServices() =>
+      UniversalBle.discoverServices(deviceId);
+
   BleDevice({
     required this.deviceId,
     required String? name,
